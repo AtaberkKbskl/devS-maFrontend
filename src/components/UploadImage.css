@@ -1,0 +1,25 @@
+/* UploadImage bileşeni için stiller */
+section {
+    background-color: #147f1d;
+  }
+  
+  input[type="file"] {
+    border: 1px dashed #2e7d32;
+    padding: 9px;
+    text-align: center;
+    color: #2e7d32;
+    background-color: #d7d7bf;
+  }
+  
+  button {
+    background-color: #388e3c;
+  }
+  
+  button:hover {
+    background-color: #27632a;
+  }
+  
+  p {
+    color: #1b5e20;
+  }
+  

@@ -1,0 +1,17 @@
+/* ProcessImage bileşeni için stiller */
+section {
+    background-color: #f3e5f5;
+  }
+  
+  button {
+    background-color: #3610e0;
+  }
+  
+  button:hover {
+    background-color: #2cb474;
+  }
+  
+  p {
+    color: #1f1ac7;
+  }
+  

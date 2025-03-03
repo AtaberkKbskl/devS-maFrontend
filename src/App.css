@@ -1,0 +1,118 @@
+/* Global Styles for the App */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background-image: url('arka.jpg'); /* Arka plan resmi */
+  background-size: cover; /* Arka planı tam olarak doldurur */
+  background-position: center; /* Ortalanır */
+  background-repeat: no-repeat; /* Tekrar etmez */
+  height: 100vh; /* Sayfanın tamamını kapsar */
+}
+
+/* Ana App Container */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  padding: 0;
+  backdrop-filter: blur(8px); /* Arka planı hafif bulanıklaştırır */
+}
+
+/* Header */
+header {
+  width: 100%; /* Tüm genişliği kapsar */
+  background-color: rgba(0, 123, 255, 0.8); /* Hafif saydam bir mavi */
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Ortadaki her bileşen (Login, Register vs.) */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px); /* Header hariç kalan alan */
+  padding: 20px;
+}
+
+.auth-content {
+  background: rgba(255, 255, 255, 0.9); /* Yarı saydam beyaz kutu */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+  width: 100%;
+  max-width: 500px; /* Maksimum genişlik */
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Başlık */
+h1 {
+  color: #fff; /* Başlık rengi */
+  margin-bottom: 10px;
+}
+
+h2 {
+  color: #007bff; /* Alt başlık rengi */
+  margin-bottom: 15px;
+}
+
+/* Butonlar */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Input Alanları */
+input[type="text"],
+input[type="password"],
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* Durum Mesajları */
+p {
+  font-size: 14px;
+  color: #444;
+}
+
+/* Geçiş Butonları */
+.auth-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.auth-toggle button {
+  margin: 0 10px;
+}
+
+.auth-toggle button.active {
+  background-color: #0056b3;
+}
