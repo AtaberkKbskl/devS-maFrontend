@@ -6,6 +6,7 @@ import UploadImage from './components/UploadImage';
 import ProcessImage from './components/ProcessImage';
 import Header from './components/Header';
 
+
 interface AppState {
   registerData: {
     username: string;
