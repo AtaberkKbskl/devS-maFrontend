@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './ImageUploadPage.css'; // <== BU IMPORT MUTLAKA EN ÜSTE EKLENMELİ
 
 const ImageUploadPage: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -46,29 +47,29 @@ const ImageUploadPage: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
+    <div className="image-page">
       <h2>Upload & Process Image</h2>
 
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      <br /><br />
+      <div className="file-section">
+        <p className="notice-text">Lütfen bir fotoğraf seçin ve ardından "Upload" butonuna tıklayın.</p>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <button onClick={handleUpload}>Upload</button>
+        <p className="status-message">{uploadStatus}</p>
+        <button onClick={handleProcess}>Process</button>
+        <p className="status-message">{processStatus}</p>
+      </div>
 
-      <button onClick={handleUpload}>Upload</button>
-      <p>{uploadStatus}</p>
-
-      <button onClick={handleProcess}>Process</button>
-      <p>{processStatus}</p>
-
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginTop: '20px' }}>
+      <div className="result-container">
         {previewUrl && (
-          <div>
+          <div className="image-box">
             <h4>Original Image</h4>
-            <img src={previewUrl} alt="Original" width="200" />
+            <img src={previewUrl} alt="Original" />
           </div>
         )}
         {outputUrl && (
-          <div>
+          <div className="image-box">
             <h4>Anonymized Image</h4>
-            <img src={outputUrl} alt="Anonymized" width="200" />
+            <img src={outputUrl} alt="Anonymized" />
           </div>
         )}
       </div>

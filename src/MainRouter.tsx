@@ -4,30 +4,26 @@ import App from './App';
 import ImageUploadPage from './pages/ImageUploadPage';
 import VideoUploadPage from './pages/VideoUploadPage';
 import CameraLivePage from './pages/CameraLivePage';
-
-
+import './MainRouter.css'; // CSS dosyasını dahil et
 
 const MainRouter: React.FC = () => {
   return (
     <Router>
-      <nav style={{ padding: '10px', textAlign: 'center', backgroundColor: '#f0f0f0' }}>
-        <Link to="/" style={{ margin: '0 15px' }}>Home</Link>
-        <Link to="/image" style={{ margin: '0 15px' }}>Image Upload</Link>
-        <Link to="/video" style={{ margin: '0 15px' }}>Video Upload</Link>
-        <Link to="/camera" style={{ margin: '0 15px' }}>Live Camera</Link>
+      <div className="sidebar">
+        <Link to="/">Home</Link>
+        <Link to="/image">Image Upload</Link>
+        <Link to="/video">Video Upload</Link>
+        <Link to="/camera">Live Camera</Link>
+      </div>
 
-
-        {/* Video ve Kamera linkleri de buraya gelecek */}
-      </nav>
-
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/image" element={<ImageUploadPage />} />
-        <Route path="/video" element={<VideoUploadPage />} />
-        <Route path="/camera" element={<CameraLivePage />} />
-
-
-      </Routes>
+      <div style={{ marginLeft: '200px', padding: '20px' }}>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/image" element={<ImageUploadPage />} />
+          <Route path="/video" element={<VideoUploadPage />} />
+          <Route path="/camera" element={<CameraLivePage />} />
+        </Routes>
+      </div>
     </Router>
   );
 };

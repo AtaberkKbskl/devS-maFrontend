@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './VideoUploadPage.css';
 const VideoUploadPage: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState('');
@@ -46,20 +46,19 @@ const VideoUploadPage: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
+    <div className="video-page">
       <h2>Upload & Process Video</h2>
-
-      <input type="file" accept="video/*" onChange={handleFileChange} />
-      <br /><br />
-
-      <button onClick={handleUpload}>Upload</button>
-      <p>{uploadStatus}</p>
-
-      <button onClick={handleProcess}>Process</button>
-      <p>{processStatus}</p>
-
+      <div className="video-section">
+        <p className="notice-text">Bir video seçin ve 'Upload' butonuna basarak yükleyin.</p>
+        <input type="file" accept="video/*" onChange={handleFileChange} />
+        <button onClick={handleUpload}>Upload</button>
+        <p className="status-message">{uploadStatus}</p>
+        <button onClick={handleProcess}>Process</button>
+        <p className="status-message">{processStatus}</p>
+      </div>
+  
       {outputVideoUrl && (
-        <div style={{ marginTop: '20px' }}>
+        <div className="video-preview">
           <h4>Anonymized Video Output</h4>
           <video width="480" controls>
             <source src={outputVideoUrl} type="video/mp4" />
@@ -69,6 +68,7 @@ const VideoUploadPage: React.FC = () => {
       )}
     </div>
   );
+  
 };
 
 export default VideoUploadPage;
