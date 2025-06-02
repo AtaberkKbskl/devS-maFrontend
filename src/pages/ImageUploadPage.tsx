@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import './ImageUploadPage.css'; // <== BU IMPORT MUTLAKA EN ÜSTE EKLENMELİ
+// src/pages/ImageUploadPage.tsx
+import React, { useState } from "react";
+import "./ImageUploadPage.css";
+import StarRating from "../components/StarRating";
+import FeedbackForm from "../components/FeedbackForm";
+import { postFeedback } from "../api";
 
 const ImageUploadPage: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadStatus, setUploadStatus] = useState('');
-  const [processStatus, setProcessStatus] = useState('');
+  const [uploadStatus, setUploadStatus] = useState<string>("");
+  const [processStatus, setProcessStatus] = useState<string>("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [outputUrl, setOutputUrl] = useState<string | null>(null);
+
+  // Rating + feedback işlemleri için state
+  const [userName] = useState<string>("GuestUser");
+  const [rating, setRating] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -18,40 +27,65 @@ const ImageUploadPage: React.FC = () => {
 
   const handleUpload = async () => {
     if (!selectedFile) return;
-
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    formData.append("file", selectedFile);
 
     try {
-      const res = await fetch('http://localhost:8080/api/image/upload', {
-        method: 'POST',
+      const res = await fetch("http://localhost:8080/api/image/upload", {
+        method: "POST",
         body: formData,
       });
       const data = await res.text();
       setUploadStatus(data);
     } catch (err) {
-      setUploadStatus('Upload failed.');
+      setUploadStatus("Upload failed.");
     }
   };
 
   const handleProcess = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/image/process');
+      const res = await fetch("http://localhost:8080/api/image/process");
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setOutputUrl(url);
-      setProcessStatus('Processing complete.');
+      setProcessStatus("Processing complete.");
     } catch (err) {
-      setProcessStatus('Processing failed.');
+      setProcessStatus("Processing failed.");
+    }
+  };
+
+  // Kullanıcının StarRating bileşeninden gelen yıldız puanını kaydet
+  const handleRate = (stars: number) => {
+    setRating(stars);
+  };
+
+  // Geri bildirim formu submit edildiğinde çağrılacak
+  const handleSubmitFeedback = async (info: {
+    username: string;
+    type: string;
+    rating: number;
+    comment: string;
+  }) => {
+    setIsSubmitting(true);
+    try {
+      await postFeedback(info);
+      alert("Geri bildiriminiz kaydedildi, teşekkürler!");
+    } catch (err) {
+      console.error(err);
+      alert("Geri bildirim gönderilirken hata oluştu.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="image-page">
-      <h2>Upload & Process Image</h2>
+      <h2>Upload &amp; Process Image</h2>
 
       <div className="file-section">
-        <p className="notice-text">Lütfen bir fotoğraf seçin ve ardından "Upload" butonuna tıklayın.</p>
+        <p className="notice-text">
+          Lütfen bir fotoğraf seçin ve ardından "Upload" butonuna tıklayın.
+        </p>
         <input type="file" accept="image/*" onChange={handleFileChange} />
         <button onClick={handleUpload}>Upload</button>
         <p className="status-message">{uploadStatus}</p>
@@ -73,6 +107,22 @@ const ImageUploadPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* ───── Rating + Feedback Bölümü ───── */}
+      <StarRating
+        type="image"
+        userName={userName}
+        onRate={handleRate}
+        isSubmitting={isSubmitting}
+      />
+
+      <FeedbackForm
+        type="image"
+        userName={userName}
+        rating={rating}
+        isSubmitting={isSubmitting}
+        onSubmitFeedback={handleSubmitFeedback}
+      />
     </div>
   );
 };
