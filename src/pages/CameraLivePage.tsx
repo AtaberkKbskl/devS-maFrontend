@@ -1,5 +1,6 @@
 // src/pages/CameraLivePage.tsx
 import React, { useEffect, useRef, useState } from "react";
+import "./CameraLivePage.css";
 import StarRating from "../components/StarRating";
 import FeedbackForm from "../components/FeedbackForm";
 import { postFeedback } from "../api";
@@ -9,13 +10,12 @@ const CameraLivePage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
 
-  // Rating + feedback işlemleri için state
-  const [userName] = useState<string>("GuestUser"); // Örneğin sabit bir kullanıcı
+  // Sabit userName kaldırıldı
   const [rating, setRating] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    // Kamera başlatma
+    // Kamera erişim isteği
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
@@ -28,6 +28,7 @@ const CameraLivePage: React.FC = () => {
         alert("Kamera erişimi reddedildi veya hata oluştu: " + err.message);
       });
 
+    // Her 2 saniyede bir işle
     const interval = setInterval(() => {
       captureAndSendFrame();
     }, 2000);
@@ -61,12 +62,10 @@ const CameraLivePage: React.FC = () => {
     }
   };
 
-  // Kullanıcının StarRating bileşeninden gelen yıldız puanını kaydet
   const handleRate = (stars: number) => {
     setRating(stars);
   };
 
-  // Geri bildirim formu submit edildiğinde çağrılacak
   const handleSubmitFeedback = async (info: {
     username: string;
     type: string;
@@ -86,37 +85,43 @@ const CameraLivePage: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h2>Real-Time Camera Face Anonymization</h2>
+    <div className="camera-page-wrapper">
+      {/* Sayfa Başlığı */}
+      <h1 className="page-title">Real-Time Camera Face Anonymization</h1>
 
-      <video ref={videoRef} style={{ width: "480px" }} />
-      <canvas ref={canvasRef} style={{ display: "none" }} />
+      {/* 1) Canlı Kamera Kartı */}
+      <div className="card camera-card">
+        <video ref={videoRef} className="live-video" />
+        <canvas ref={canvasRef} style={{ display: "none" }} />
 
-      {processedImage && (
-        <div style={{ marginTop: "20px" }}>
-          <h4>Anonymous Frame</h4>
-          <img src={processedImage} alt="Processed" width="480" />
-        </div>
-      )}
+        {processedImage && (
+          <div className="processed-image-container">
+            <h2 className="card-title">Anonymous Frame</h2>
+            <img
+              src={processedImage}
+              alt="Processed"
+              className="processed-img"
+            />
+          </div>
+        )}
+      </div>
 
-      {/* ───── Buraya kadar orijinal kod ───── */}
-
-      {/* Rating bileşeni */}
-      <StarRating
-        type="camera"
-        userName={userName}
-        onRate={handleRate}
-        isSubmitting={isSubmitting}
-      />
-
-      {/* Feedback formu */}
-      <FeedbackForm
-        type="camera"
-        userName={userName}
-        rating={rating}
-        isSubmitting={isSubmitting}
-        onSubmitFeedback={handleSubmitFeedback}
-      />
+      {/* 2) Rating + Feedback Kartı */}
+      <div className="card feedback-card">
+        <h2 className="card-title">Oy ver (camera):</h2>
+        <StarRating
+          type="camera"
+          userName=""  // boş string
+          onRate={handleRate}
+          isSubmitting={isSubmitting}
+        />
+        <FeedbackForm
+          type="camera"
+          rating={rating}
+          isSubmitting={isSubmitting}
+          onSubmitFeedback={handleSubmitFeedback}
+        />
+      </div>
     </div>
   );
 };

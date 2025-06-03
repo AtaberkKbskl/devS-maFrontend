@@ -12,8 +12,7 @@ const ImageUploadPage: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [outputUrl, setOutputUrl] = useState<string | null>(null);
 
-  // Rating + feedback işlemleri için state
-  const [userName] = useState<string>("GuestUser");
+  // Artık sabit userName yok; kullanıcı ismi FeedbackForm içinde alınacak
   const [rating, setRating] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -22,6 +21,10 @@ const ImageUploadPage: React.FC = () => {
       const file = e.target.files[0];
       setSelectedFile(file);
       setPreviewUrl(URL.createObjectURL(file));
+      // Eğer daha önce bir çıktı varsa temizle
+      setOutputUrl(null);
+      setUploadStatus("");
+      setProcessStatus("");
     }
   };
 
@@ -38,7 +41,7 @@ const ImageUploadPage: React.FC = () => {
       const data = await res.text();
       setUploadStatus(data);
     } catch (err) {
-      setUploadStatus("Upload failed.");
+      setUploadStatus("Yükleme başarısız.");
     }
   };
 
@@ -48,18 +51,18 @@ const ImageUploadPage: React.FC = () => {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setOutputUrl(url);
-      setProcessStatus("Processing complete.");
+      setProcessStatus("İşleme tamamlandı.");
     } catch (err) {
-      setProcessStatus("Processing failed.");
+      setProcessStatus("İşleme başarısız.");
     }
   };
 
-  // Kullanıcının StarRating bileşeninden gelen yıldız puanını kaydet
+  // Yıldız puanını StarRating'ten alıyoruz
   const handleRate = (stars: number) => {
     setRating(stars);
   };
 
-  // Geri bildirim formu submit edildiğinde çağrılacak
+  // Feedback formu gönderildiğinde çağrılacak
   const handleSubmitFeedback = async (info: {
     username: string;
     type: string;
@@ -79,50 +82,72 @@ const ImageUploadPage: React.FC = () => {
   };
 
   return (
-    <div className="image-page">
-      <h2>Upload &amp; Process Image</h2>
+    <div className="image-page-wrapper">
+      {/* Sayfa Başlığı */}
+      <h1 className="page-title">Upload &amp; Process Image</h1>
 
-      <div className="file-section">
-        <p className="notice-text">
+      {/* 1) Dosya Yükleme ve İşleme Kartı */}
+      <div className="card upload-card">
+        <p className="sub-text">
           Lütfen bir fotoğraf seçin ve ardından "Upload" butonuna tıklayın.
         </p>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-        <button onClick={handleUpload}>Upload</button>
-        <p className="status-message">{uploadStatus}</p>
-        <button onClick={handleProcess}>Process</button>
-        <p className="status-message">{processStatus}</p>
+
+        <div className="file-input-container">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+          <span className="file-name">
+            {selectedFile ? selectedFile.name : "Henüz dosya seçilmedi"}
+          </span>
+        </div>
+
+        <div className="button-group">
+          <button onClick={handleUpload} className="primary-btn">
+            Upload
+          </button>
+          <button onClick={handleProcess} className="primary-btn">
+            Process
+          </button>
+        </div>
+
+        {uploadStatus && <p className="status-text">{uploadStatus}</p>}
+        {processStatus && <p className="status-text">{processStatus}</p>}
       </div>
 
-      <div className="result-container">
-        {previewUrl && (
-          <div className="image-box">
-            <h4>Original Image</h4>
-            <img src={previewUrl} alt="Original" />
-          </div>
-        )}
-        {outputUrl && (
-          <div className="image-box">
-            <h4>Anonymized Image</h4>
-            <img src={outputUrl} alt="Anonymized" />
-          </div>
-        )}
+      {/* 2) Önizleme Kartı */}
+      {previewUrl && (
+        <div className="card preview-card">
+          <h2 className="card-title">Original Image</h2>
+          <img src={previewUrl} alt="Original" className="preview-img" />
+        </div>
+      )}
+
+      {outputUrl && (
+        <div className="card preview-card">
+          <h2 className="card-title">Anonymized Image</h2>
+          <img src={outputUrl} alt="Anonymized" className="preview-img" />
+        </div>
+      )}
+
+      {/* 3) Rating + Feedback Kartı */}
+      <div className="card feedback-card">
+        <h2 className="card-title">Oy ver (image):</h2>
+        <StarRating
+          type="image"
+          userName=""  // StarRating prop imzası gereği, ancak form içinden kullanıcı adı alınacak
+          onRate={handleRate}
+          isSubmitting={isSubmitting}
+        />
+        <FeedbackForm
+          type="image"
+          rating={rating}
+          isSubmitting={isSubmitting}
+          onSubmitFeedback={handleSubmitFeedback}
+        />
       </div>
-
-      {/* ───── Rating + Feedback Bölümü ───── */}
-      <StarRating
-        type="image"
-        userName={userName}
-        onRate={handleRate}
-        isSubmitting={isSubmitting}
-      />
-
-      <FeedbackForm
-        type="image"
-        userName={userName}
-        rating={rating}
-        isSubmitting={isSubmitting}
-        onSubmitFeedback={handleSubmitFeedback}
-      />
     </div>
   );
 };

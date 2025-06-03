@@ -11,20 +11,22 @@ const VideoUploadPage: React.FC = () => {
   const [processStatus, setProcessStatus] = useState<string>("");
   const [outputVideoUrl, setOutputVideoUrl] = useState<string | null>(null);
 
-  // Rating + feedback işlemleri için state
-  const [userName] = useState<string>("GuestUser");
+  // Sabit userName kaldırıldı; artık FeedbackForm içinden alınacak
   const [rating, setRating] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
+      setOutputVideoUrl(null);
+      setUploadStatus("");
+      setProcessStatus("");
     }
   };
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please select a video file!");
+      alert("Lütfen önce bir video seçin!");
       return;
     }
 
@@ -39,7 +41,7 @@ const VideoUploadPage: React.FC = () => {
       const data = await res.text();
       setUploadStatus(data);
     } catch (err) {
-      setUploadStatus("Upload failed.");
+      setUploadStatus("Yükleme başarısız.");
     }
   };
 
@@ -49,18 +51,16 @@ const VideoUploadPage: React.FC = () => {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setOutputVideoUrl(url);
-      setProcessStatus("Processing complete.");
+      setProcessStatus("İşleme tamamlandı.");
     } catch (err) {
-      setProcessStatus("Processing failed.");
+      setProcessStatus("İşleme başarısız.");
     }
   };
 
-  // Kullanıcının StarRating bileşeninden gelen yıldız puanını kaydet
   const handleRate = (stars: number) => {
     setRating(stars);
   };
 
-  // Geri bildirim formu submit edildiğinde çağrılacak
   const handleSubmitFeedback = async (info: {
     username: string;
     type: string;
@@ -80,44 +80,65 @@ const VideoUploadPage: React.FC = () => {
   };
 
   return (
-    <div className="video-page">
-      <h2>Upload &amp; Process Video</h2>
-      <div className="video-section">
-        <p className="notice-text">
-          Bir video seçin ve "Upload" butonuna basarak yükleyin.
+    <div className="video-page-wrapper">
+      {/* Sayfa Başlığı */}
+      <h1 className="page-title">Upload &amp; Process Video</h1>
+
+      {/* 1) Video Yükleme Kartı */}
+      <div className="card upload-card">
+        <p className="sub-text">
+          Lütfen bir video seçin ve ardından “Upload” butonuna tıklayın.
         </p>
-        <input type="file" accept="video/*" onChange={handleFileChange} />
-        <button onClick={handleUpload}>Upload</button>
-        <p className="status-message">{uploadStatus}</p>
-        <button onClick={handleProcess}>Process</button>
-        <p className="status-message">{processStatus}</p>
+        <div className="file-input-container">
+          <input
+            type="file"
+            accept="video/*"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+          <span className="file-name">
+            {selectedFile ? selectedFile.name : "Henüz video seçilmedi"}
+          </span>
+        </div>
+        <div className="button-group">
+          <button onClick={handleUpload} className="primary-btn">
+            Upload
+          </button>
+          <button onClick={handleProcess} className="primary-btn">
+            Process
+          </button>
+        </div>
+        {uploadStatus && <p className="status-text">{uploadStatus}</p>}
+        {processStatus && <p className="status-text">{processStatus}</p>}
       </div>
 
+      {/* 2) Önizleme Video Kartı */}
       {outputVideoUrl && (
-        <div className="video-preview">
-          <h4>Anonymized Video Output</h4>
-          <video width="480" controls>
+        <div className="card preview-card">
+          <h2 className="card-title">Anonymized Video Output</h2>
+          <video width="100%" controls className="preview-video">
             <source src={outputVideoUrl} type="video/mp4" />
             Tarayıcınız video etiketini desteklemiyor.
           </video>
         </div>
       )}
 
-      {/* ───── Rating + Feedback Bölümü ───── */}
-      <StarRating
-        type="video"
-        userName={userName}
-        onRate={handleRate}
-        isSubmitting={isSubmitting}
-      />
-
-      <FeedbackForm
-        type="video"
-        userName={userName}
-        rating={rating}
-        isSubmitting={isSubmitting}
-        onSubmitFeedback={handleSubmitFeedback}
-      />
+      {/* 3) Rating + Feedback Kartı */}
+      <div className="card feedback-card">
+        <h2 className="card-title">Oy ver (video):</h2>
+        <StarRating
+          type="video"
+          userName=""  // boş string, çünkü kullanıcı adı artık FeedbackForm içinde girilecek
+          onRate={handleRate}
+          isSubmitting={isSubmitting}
+        />
+        <FeedbackForm
+          type="video"
+          rating={rating}
+          isSubmitting={isSubmitting}
+          onSubmitFeedback={handleSubmitFeedback}
+        />
+      </div>
     </div>
   );
 };

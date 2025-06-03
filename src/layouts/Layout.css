@@ -1,0 +1,115 @@
+/* src/layouts/Layout.css */
+
+/* ─────────── KAPSAYICI ─────────── */
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ─────────── SIDEBAR (SOL MENÜ) ─────────── */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;                      /* Sidebar genişliği */
+  height: 100vh;
+  background-color: rgba(26, 26, 26, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 80px;                 /* Header yaklaşık 60px, + biraz boşluk */
+  z-index: 1000;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;                  /* Menü çok uzunsa kaydırma */
+}
+
+.sidebar a {
+  display: block;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 20px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.sidebar a:hover {
+  background-color: #333;
+}
+
+/* ─────────── MAIN CONTENT (SAĞ KISIM) ─────────── */
+.main-content {
+  margin-left: 200px;                /* Sidebar’ın boyutu kadar boşluk */
+  width: calc(100% - 200px);         /* Kalan genişlik */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* ─────────── HEADER (ÜST ÇUBUK) ─────────── */
+.header {
+  width: 100%;                       /* main-content içinde kalan tüm genişliği kaplar */
+  background: linear-gradient(to right, #0f4c81, #0056b3);
+  color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1001;                     /* sidebar’dan yukarıda */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+.header-logo {
+  height: 50px;
+  margin-right: 15px;
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* ─────────── PAGE CONTENT (İÇERİK) ─────────── */
+.page-content {
+  flex: 1;
+  padding: 20px;                     /* Kenarlara yapışmayı önler */
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;           /* İçerik kartları ortalanır */
+  background-color: transparent;     /* Global arka plan body’den alınıyor */
+  overflow-x: auto;                  /* Geniş içerik varsa yatay kaydırma */
+}
+
+/* ─────────── RESPONSIVE ─────────── */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px;
+    padding-top: 60px;
+  }
+  .sidebar a {
+    font-size: 0.85rem;
+    padding: 10px 0;
+    text-align: center;
+  }
+  .main-content {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+  }
+  .header {
+    padding: 16px;
+  }
+  .header-title {
+    font-size: 1.6rem;
+  }
+  .page-content {
+    padding: 16px;
+  }
+}

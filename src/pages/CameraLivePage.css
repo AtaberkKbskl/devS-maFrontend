@@ -1,8 +1,8 @@
-/* src/pages/VideoUploadPage.css */
+/* src/pages/CameraLivePage.css */
 
-.video-page-wrapper {
+.camera-page-wrapper {
   width: 100%;
-  max-width: 900px;           /* İçerik en fazla 900px genişliğinde */
+  max-width: 900px;           /* Sayfa en fazla 900px */
   margin: 0;
   padding: 0;
   display: flex;
@@ -24,7 +24,7 @@
 /* ───── Kart Ortak Stilleri ───── */
 .card {
   width: 100%;
-  max-width: 600px;           /* Kart en fazla 600px */
+  max-width: 600px;           /* 600px’i geçmez */
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -46,84 +46,26 @@
   display: inline-block;
 }
 
-.sub-text {
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-  color: #e0e0e0;
-}
-
-/* Dosya Seçme Kutusu */
-.file-input-container {
+.camera-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 2px dashed rgba(255, 255, 255, 0.6);
+}
+
+.live-video {
+  width: 100%;
+  max-height: 360px;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
-  overflow-x: auto;            /* Geniş dosya adlarında kaydırma */
-  box-sizing: border-box;
-}
-
-.file-input-container .file-input {
-  flex: 0 0 auto;
-  color: #ffffff;
-  background: transparent;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.file-input-container .file-name {
-  margin-left: 1rem;
-  color: #ffffff;
-  font-size: 0.95rem;
-  white-space: nowrap;         /* Tek satırda */
-}
-
-/* Buton Grubu */
-.button-group {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+  background-color: #000;
   margin-bottom: 1rem;
 }
 
-.primary-btn {
-  background-color: #3f51b5;
-  color: #ffffff;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.primary-btn:hover {
-  background-color: #303f9f;
-  transform: translateY(-2px);
-}
-
-.primary-btn:active {
-  transform: translateY(0);
-}
-
-/* Durum Metni */
-.status-text {
-  margin-top: 0.5rem;
-  font-size: 0.95rem;
-  color: #ffd54f;
-}
-
-/* Önizleme Video Kartı */
-.preview-card {
+.processed-image-container {
   text-align: center;
 }
 
-.preview-video {
-  width: 100%;
-  max-height: 360px;
+.processed-img {
+  max-width: 100%;
   border-radius: 8px;
   border: 2px solid rgba(255, 255, 255, 0.4);
   margin-top: 0.5rem;
@@ -180,7 +122,7 @@
 }
 
 @media (max-width: 480px) {
-  .video-page-wrapper {
+  .camera-page-wrapper {
     max-width: 100%;
     padding: 1rem 0.5rem;
     gap: 1rem;
@@ -191,16 +133,7 @@
   .card {
     padding: 1rem;
   }
-  .file-input-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .file-input-container .file-name {
-    margin-left: 0;
-    margin-top: 0.5rem;
-  }
-  .button-group {
-    flex-direction: column;
-    gap: 0.75rem;
+  .live-video {
+    max-height: 240px;
   }
 }

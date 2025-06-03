@@ -1,0 +1,62 @@
+/* src/pages/FeedbackListPage.css */
+
+.feedback-list-container {
+  width: 100%;
+  max-width: 900px;           /* İçerik en fazla 900px */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 2rem;       /* Alt tarafta biraz boşluk */
+}
+
+.feedback-list-container h2 {
+  font-size: 2rem;
+  color: #0f4c81;
+  margin: 1.5rem 0 1rem 0;
+  text-align: center;
+}
+
+.feedback-table-wrapper {
+  width: 100%;
+  overflow-x: auto;           /* Tablo çok geniş olduğunda kaydırma */
+}
+
+.feedback-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  color: #000000;             /* Tablo metinleri siyah */
+  box-sizing: border-box;
+}
+
+.feedback-table th,
+.feedback-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  white-space: nowrap;        /* Metni tek satırda tut */
+}
+
+.feedback-table thead {
+  background-color: #0f4c81;
+  color: white;
+}
+
+.feedback-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.feedback-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+@media (max-width: 600px) {
+  .feedback-table th,
+  .feedback-table td {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+}
